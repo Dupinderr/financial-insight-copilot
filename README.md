@@ -9,6 +9,28 @@ LangGraph, ChromaDB, FastAPI, Streamlit, SQLite.
 
 ---
 
+## About
+
+The problem I wanted to solve is that an LLM sounds exactly the same whether a
+number came from the data or it made the number up. "Reliance's revenue grew
+14.8%" reads with the same confidence either way, and for anything financial
+that's a real issue.
+
+So this project answers questions from two sources — a SQLite database of daily
+prices for six NSE stocks (2022–2026) and a set of company annual reports —
+and then puts a separate agent in front of the answer whose only job is to
+distrust it. That agent pulls out every number in the draft and refuses to pass
+any figure it can't trace back to a specific database row or document passage.
+Anything it can't verify gets marked `⚠️ unverified` rather than quietly
+removed.
+
+The interesting part isn't the RAG pipeline, it's whether that check actually
+works. So I built an eval suite that feeds the Critic notes with deliberately
+fabricated numbers in them and measures how many it catches — and, just as
+importantly, how often it flags numbers that were fine all along.
+
+---
+
 ## Results
 
 Measured on 2026-08-05 with `python -m eval.run_eval`. Raw output in
