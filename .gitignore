@@ -31,5 +31,10 @@ cleaned_stock_data.csv
 .vscode/
 .idea/
 
+# --- Chroma vector index -----------------------------------------------------
+# Rebuilt from ingestion/corpus with `python -m ingestion.ingest`. Excluded so
+# the repo carries no extracted text from the source annual reports.
+chroma_db/
+
 # --- os ----------------------------------------------------------------------
 .DS_Store
