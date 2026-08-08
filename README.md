@@ -306,11 +306,19 @@ run Streamlit alone and skip `app.py` entirely.
    execution mode, whether the Groq key resolved, corpus size and tracing
    state — the hosted equivalent of `GET /health`.
 
-**What ships and what doesn't.** `chroma_db/` (27 MB) and `financial_data.db`
-are committed, so the deployed app needs neither the source PDFs nor a
-re-ingest. The corpus PDFs (26 MB) and the ONNX model (166 MB) are gitignored.
-That means **the first research query on a fresh deploy downloads ~79 MB** of
-embedding model before it can respond; subsequent queries are warm.
+**What ships and what doesn't.** `financial_data.db` is committed, so the SQL
+side works immediately. The corpus PDFs (26 MB), the Chroma index (27 MB) and
+the ONNX model (166 MB) are all gitignored — the repo deliberately carries no
+text extracted from the source annual reports.
+
+Two consequences for a hosted deploy:
+
+- **There is no document corpus.** The Research Agent reports itself
+  unavailable and research questions fall back to SQL-only evidence. The
+  Synthesizer states the gap rather than inventing narrative. To demo
+  retrieval, either run locally after `python -m ingestion.ingest`, or commit
+  `chroma_db/` (drop it from `.gitignore`) and redeploy.
+- **The first query downloads ~79 MB** of embedding model; later ones are warm.
 
 ## Evaluation
 
