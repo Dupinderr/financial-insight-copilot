@@ -1,0 +1,409 @@
+{
+  "generated_at": "2026-08-05 17:41:47",
+  "injection": {
+    "summary": {
+      "injected_total": 9,
+      "caught": 9,
+      "catch_rate": 1.0,
+      "legitimate_total": 7,
+      "false_positives": 0,
+      "false_positive_rate": 0.0,
+      "unflagged_rate_critic_off": 1.0,
+      "unflagged_rate_critic_on": 0.0
+    },
+    "results": [
+      {
+        "id": "i01",
+        "description": "Fabricated fundamentals bolted onto a real price figure",
+        "injected": [
+          14.8,
+          26.3
+        ],
+        "caught": [
+          14.8,
+          26.3
+        ],
+        "missed": [],
+        "legitimate": [
+          3996.42
+        ],
+        "false_positives": [],
+        "confidence": "low"
+      },
+      {
+        "id": "i02",
+        "description": "A real volatility figure restated at a plausible but wrong magnitude",
+        "injected": [
+          0.0374
+        ],
+        "caught": [
+          0.0374
+        ],
+        "missed": [],
+        "legitimate": [],
+        "false_positives": [],
+        "confidence": "low"
+      },
+      {
+        "id": "i03",
+        "description": "Clean control - every figure is traceable, nothing should be flagged",
+        "injected": [],
+        "caught": [],
+        "missed": [],
+        "legitimate": [
+          434.0399169921875,
+          369.6766357421875,
+          249.0
+        ],
+        "false_positives": [],
+        "confidence": "high"
+      },
+      {
+        "id": "i04",
+        "description": "Invented peer comparison alongside a genuine RSI reading",
+        "injected": [
+          58.2,
+          31.4
+        ],
+        "caught": [
+          58.2,
+          31.4
+        ],
+        "missed": [],
+        "legitimate": [
+          64.85000105722037
+        ],
+        "false_positives": [],
+        "confidence": "low"
+      },
+      {
+        "id": "i05",
+        "description": "Correct figure paired with a fabricated percentage move",
+        "injected": [
+          22.7
+        ],
+        "caught": [
+          22.7
+        ],
+        "missed": [],
+        "legitimate": [
+          13730.0
+        ],
+        "false_positives": [],
+        "confidence": "low"
+      },
+      {
+        "id": "i06",
+        "description": "Clean control with derived-looking but evidence-backed counts",
+        "injected": [],
+        "caught": [],
+        "missed": [],
+        "legitimate": [
+          10.0
+        ],
+        "false_positives": [],
+        "confidence": "high"
+      },
+      {
+        "id": "i07",
+        "description": "Entirely fabricated numeric note with no supporting evidence at all",
+        "injected": [
+          42.7,
+          614000.0,
+          12.1
+        ],
+        "caught": [
+          42.7,
+          614000.0,
+          12.1
+        ],
+        "missed": [],
+        "legitimate": [],
+        "false_positives": [],
+        "confidence": "low"
+      }
+    ],
+    "measured_at": "2026-08-05 17:41:11",
+    "limit": null
+  },
+  "elapsed_s": 275.2,
+  "last_suite_run": "factual",
+  "factual": {
+    "summary": {
+      "total": 22,
+      "correct": 22,
+      "accuracy": 1.0,
+      "wrong_answers": 0,
+      "wrong_answers_flagged_not_high_confidence": 0,
+      "calibration": null
+    },
+    "results": [
+      {
+        "id": "f01",
+        "question": "What was the highest closing price of Reliance ever recorded?",
+        "expected": 1584.9718017578125,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT MAX(Close) AS max_close_price FROM stocks_with_features WHERE ticker = 'RELIANCE.NS'",
+        "elapsed_s": 4.69
+      },
+      {
+        "id": "f02",
+        "question": "What was the lowest closing price of TCS in 2024?",
+        "expected": 3350.915771484375,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT MIN(Close) AS lowest_close FROM stocks_with_features WHERE ticker = 'TCS.NS' AND STRFTIME('%Y', Date) = '2024'",
+        "elapsed_s": 2.68
+      },
+      {
+        "id": "f03",
+        "question": "What was the average daily trading volume of HDFC Bank in 2025?",
+        "expected": 20000756.012048192,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT AVG(Volume) AS avg_daily_volume FROM stocks_with_features WHERE ticker = 'HDFCBANK.NS' AND STRFTIME('%Y', Date) = '2025'",
+        "elapsed_s": 13.09
+      },
+      {
+        "id": "f04",
+        "question": "Across the whole dataset, what is the highest average 30-day volatility of any single ticker?",
+        "expected": 0.0137184274003916,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 3,
+        "unverified_count": 0,
+        "sql": "SELECT ticker, AVG(volatility_30d) AS avg_volatility \nFROM stocks_with_features \nGROUP BY ticker \nORDER BY avg_volatility DESC \nLIMIT 1;",
+        "elapsed_s": 19.39
+      },
+      {
+        "id": "f05",
+        "question": "How many outlier trading days does Maruti have?",
+        "expected": 10,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "low",
+        "verified_count": 2,
+        "unverified_count": 1,
+        "sql": "SELECT COUNT(*) AS outlier_count FROM stocks_with_features WHERE ticker = 'MARUTI.NS' AND is_outlier = 1",
+        "elapsed_s": 10.83
+      },
+      {
+        "id": "f06",
+        "question": "What is the most recent 14-day RSI for ITC?",
+        "expected": 45.18274513620847,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT rsi_14 AS current_rsi FROM stocks_with_features WHERE ticker = 'ITC.NS' ORDER BY Date DESC LIMIT 1",
+        "elapsed_s": 12.46
+      },
+      {
+        "id": "f07",
+        "question": "What was the best single-day return Sun Pharma achieved?",
+        "expected": 0.06979763313412812,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT ticker, MAX(daily_return) AS max_daily_return FROM stocks_with_features WHERE ticker = 'SUNPHARMA.NS'",
+        "elapsed_s": 14.11
+      },
+      {
+        "id": "f08",
+        "question": "What was the worst single-day return for Reliance?",
+        "expected": -0.07485139657931561,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT MIN(daily_return) AS min_daily_return FROM stocks_with_features WHERE ticker = 'RELIANCE.NS'",
+        "elapsed_s": 12.04
+      },
+      {
+        "id": "f09",
+        "question": "What was the average closing price of TCS in 2023?",
+        "expected": 3075.033373525191,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT AVG(Close) AS average_close_price FROM stocks_with_features WHERE ticker = 'TCS.NS' AND Date LIKE '2023%'",
+        "elapsed_s": 12.25
+      },
+      {
+        "id": "f10",
+        "question": "What is the highest average 30-day volatility of any sector?",
+        "expected": 0.0137184274003916,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT sector, AVG(volatility_30d) AS avg_volatility \nFROM stocks_with_features \nGROUP BY sector \nORDER BY avg_volatility DESC \nLIMIT 1",
+        "elapsed_s": 14.09
+      },
+      {
+        "id": "f11",
+        "question": "How many trading days of data exist for Reliance?",
+        "expected": 1130,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT COUNT(*) AS trading_days FROM stocks_with_features WHERE ticker = 'RELIANCE.NS'",
+        "elapsed_s": 11.26
+      },
+      {
+        "id": "f12",
+        "question": "What is the most recent closing price of Maruti?",
+        "expected": 13730.0,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT Close AS recent_close_price FROM stocks_with_features WHERE ticker = 'MARUTI.NS' ORDER BY Date DESC LIMIT 1",
+        "elapsed_s": 12.75
+      },
+      {
+        "id": "f13",
+        "question": "On how many days was ITC's 14-day RSI above 70?",
+        "expected": 166,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 1,
+        "unverified_count": 0,
+        "sql": "SELECT COUNT(*) AS overbought_days \nFROM stocks_with_features \nWHERE ticker = 'ITC.NS' AND rsi_14 > 70",
+        "elapsed_s": 11.86
+      },
+      {
+        "id": "f14",
+        "question": "What was the highest single-day trading volume recorded for TCS?",
+        "expected": 16331582,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT MAX(Volume) AS max_volume FROM stocks_with_features WHERE ticker = 'TCS.NS'",
+        "elapsed_s": 11.25
+      },
+      {
+        "id": "f15",
+        "question": "What is the average daily return of HDFC Bank across the whole period?",
+        "expected": 0.00012419671050012168,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT AVG(daily_return) AS avg_daily_return FROM stocks_with_features WHERE ticker = 'HDFCBANK.NS'",
+        "elapsed_s": 12.93
+      },
+      {
+        "id": "f16",
+        "question": "Which ticker has the most outlier days, and how many does it have?",
+        "expected": 11,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT ticker, COUNT(*) as outlier_count\nFROM stocks_with_features\nWHERE is_outlier = 1\nGROUP BY ticker\nORDER BY outlier_count DESC\nLIMIT 1",
+        "elapsed_s": 11.89
+      },
+      {
+        "id": "f17",
+        "question": "What is the latest 30-day moving average for Sun Pharma?",
+        "expected": 1897.611726888021,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT ma_30 AS latest_ma_30 FROM stocks_with_features WHERE ticker = 'SUNPHARMA.NS' ORDER BY Date DESC LIMIT 1",
+        "elapsed_s": 14.34
+      },
+      {
+        "id": "f18",
+        "question": "What was ITC's highest closing price in 2026?",
+        "expected": 346.9295959472656,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT MAX(Close) AS highest_close_price \nFROM stocks_with_features \nWHERE ticker = 'ITC.NS' AND Date LIKE '2026%'",
+        "elapsed_s": 28.72
+      },
+      {
+        "id": "f19",
+        "question": "What was Maruti's average 30-day volatility during 2025?",
+        "expected": 0.012556149720816796,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT AVG(volatility_30d) AS average_volatility FROM stocks_with_features WHERE ticker = 'MARUTI.NS' AND STRFTIME('%Y', Date) = '2025'",
+        "elapsed_s": 16.29
+      },
+      {
+        "id": "f20",
+        "question": "On how many days did Reliance close above its 30-day moving average?",
+        "expected": 565,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT COUNT(*) as days_above_ma \nFROM stocks_with_features \nWHERE ticker = 'RELIANCE.NS' AND Close > ma_30;",
+        "elapsed_s": 4.0
+      },
+      {
+        "id": "f21",
+        "question": "What was the lowest closing price of HDFC Bank in 2022?",
+        "expected": 606.4892578125,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT MIN(Close) AS lowest_close_price \nFROM stocks_with_features \nWHERE ticker = 'HDFCBANK.NS' AND Date LIKE '2022%'",
+        "elapsed_s": 2.75
+      },
+      {
+        "id": "f22",
+        "question": "What was the average trading volume across all tickers in 2024?",
+        "expected": 12769845.785230352,
+        "correct": true,
+        "correct_before_critic": true,
+        "confidence": "high",
+        "verified_count": 2,
+        "unverified_count": 0,
+        "sql": "SELECT AVG(Volume) AS avg_volume \nFROM stocks_with_features \nWHERE STRFTIME('%Y', Date) = '2024'",
+        "elapsed_s": 3.06
+      }
+    ],
+    "measured_at": "2026-08-05 17:41:47",
+    "limit": null
+  }
+}

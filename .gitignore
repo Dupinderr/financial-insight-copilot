@@ -1,0 +1,35 @@
+# --- secrets: never commit ---------------------------------------------------
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# --- virtualenv (832 MB) -----------------------------------------------------
+.venv/
+venv/
+
+# --- downloaded ONNX embedding model (166 MB, re-downloads on demand) --------
+.models/
+
+# --- python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- corpus PDFs (26 MB, redistributing them is the publishers' call) --------
+# The Chroma index built from them is committed instead, so the app still runs.
+ingestion/corpus/**/*.pdf
+!ingestion/corpus/README.md
+
+# --- generated data ----------------------------------------------------------
+raw_stock_data.csv
+cleaned_stock_data.csv
+
+# --- editor / tooling state --------------------------------------------------
+.claude/
+.vscode/
+.idea/
+
+# --- os ----------------------------------------------------------------------
+.DS_Store

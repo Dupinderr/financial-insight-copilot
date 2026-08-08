@@ -1,0 +1,175 @@
+{
+  "_comment": "Ground truth is stored as SQL rather than as literal values, so the expected answer is recomputed from financial_data.db at eval time and can never drift out of sync with the database.",
+  "factual": [
+    {
+      "id": "f01",
+      "question": "What was the highest closing price of Reliance ever recorded?",
+      "ground_truth_sql": "SELECT MAX(Close) AS v FROM stocks_with_features WHERE ticker='RELIANCE.NS'"
+    },
+    {
+      "id": "f02",
+      "question": "What was the lowest closing price of TCS in 2024?",
+      "ground_truth_sql": "SELECT MIN(Close) AS v FROM stocks_with_features WHERE ticker='TCS.NS' AND STRFTIME('%Y', Date)='2024'"
+    },
+    {
+      "id": "f03",
+      "question": "What was the average daily trading volume of HDFC Bank in 2025?",
+      "ground_truth_sql": "SELECT AVG(Volume) AS v FROM stocks_with_features WHERE ticker='HDFCBANK.NS' AND STRFTIME('%Y', Date)='2025'"
+    },
+    {
+      "id": "f04",
+      "question": "Across the whole dataset, what is the highest average 30-day volatility of any single ticker?",
+      "ground_truth_sql": "SELECT AVG(volatility_30d) AS v FROM stocks_with_features GROUP BY ticker ORDER BY v DESC LIMIT 1"
+    },
+    {
+      "id": "f05",
+      "question": "How many outlier trading days does Maruti have?",
+      "ground_truth_sql": "SELECT COUNT(*) AS v FROM stocks_with_features WHERE ticker='MARUTI.NS' AND is_outlier=1"
+    },
+    {
+      "id": "f06",
+      "question": "What is the most recent 14-day RSI for ITC?",
+      "ground_truth_sql": "SELECT rsi_14 AS v FROM stocks_with_features WHERE ticker='ITC.NS' AND rsi_14 IS NOT NULL ORDER BY Date DESC LIMIT 1"
+    },
+    {
+      "id": "f07",
+      "question": "What was the best single-day return Sun Pharma achieved?",
+      "ground_truth_sql": "SELECT MAX(daily_return) AS v FROM stocks_with_features WHERE ticker='SUNPHARMA.NS'"
+    },
+    {
+      "id": "f08",
+      "question": "What was the worst single-day return for Reliance?",
+      "ground_truth_sql": "SELECT MIN(daily_return) AS v FROM stocks_with_features WHERE ticker='RELIANCE.NS'"
+    },
+    {
+      "id": "f09",
+      "question": "What was the average closing price of TCS in 2023?",
+      "ground_truth_sql": "SELECT AVG(Close) AS v FROM stocks_with_features WHERE ticker='TCS.NS' AND STRFTIME('%Y', Date)='2023'"
+    },
+    {
+      "id": "f10",
+      "question": "What is the highest average 30-day volatility of any sector?",
+      "ground_truth_sql": "SELECT AVG(volatility_30d) AS v FROM stocks_with_features GROUP BY sector ORDER BY v DESC LIMIT 1"
+    },
+    {
+      "id": "f11",
+      "question": "How many trading days of data exist for Reliance?",
+      "ground_truth_sql": "SELECT COUNT(*) AS v FROM stocks_with_features WHERE ticker='RELIANCE.NS'"
+    },
+    {
+      "id": "f12",
+      "question": "What is the most recent closing price of Maruti?",
+      "ground_truth_sql": "SELECT Close AS v FROM stocks_with_features WHERE ticker='MARUTI.NS' ORDER BY Date DESC LIMIT 1"
+    },
+    {
+      "id": "f13",
+      "question": "On how many days was ITC's 14-day RSI above 70?",
+      "ground_truth_sql": "SELECT COUNT(*) AS v FROM stocks_with_features WHERE ticker='ITC.NS' AND rsi_14 > 70"
+    },
+    {
+      "id": "f14",
+      "question": "What was the highest single-day trading volume recorded for TCS?",
+      "ground_truth_sql": "SELECT MAX(Volume) AS v FROM stocks_with_features WHERE ticker='TCS.NS'"
+    },
+    {
+      "id": "f15",
+      "question": "What is the average daily return of HDFC Bank across the whole period?",
+      "ground_truth_sql": "SELECT AVG(daily_return) AS v FROM stocks_with_features WHERE ticker='HDFCBANK.NS'"
+    },
+    {
+      "id": "f16",
+      "question": "Which ticker has the most outlier days, and how many does it have?",
+      "ground_truth_sql": "SELECT COUNT(*) AS v FROM stocks_with_features WHERE is_outlier=1 GROUP BY ticker ORDER BY v DESC LIMIT 1"
+    },
+    {
+      "id": "f17",
+      "question": "What is the latest 30-day moving average for Sun Pharma?",
+      "ground_truth_sql": "SELECT ma_30 AS v FROM stocks_with_features WHERE ticker='SUNPHARMA.NS' AND ma_30 IS NOT NULL ORDER BY Date DESC LIMIT 1"
+    },
+    {
+      "id": "f18",
+      "question": "What was ITC's highest closing price in 2026?",
+      "ground_truth_sql": "SELECT MAX(Close) AS v FROM stocks_with_features WHERE ticker='ITC.NS' AND STRFTIME('%Y', Date)='2026'"
+    },
+    {
+      "id": "f19",
+      "question": "What was Maruti's average 30-day volatility during 2025?",
+      "ground_truth_sql": "SELECT AVG(volatility_30d) AS v FROM stocks_with_features WHERE ticker='MARUTI.NS' AND STRFTIME('%Y', Date)='2025'"
+    },
+    {
+      "id": "f20",
+      "question": "On how many days did Reliance close above its 30-day moving average?",
+      "ground_truth_sql": "SELECT COUNT(*) AS v FROM stocks_with_features WHERE ticker='RELIANCE.NS' AND ma_30 IS NOT NULL AND Close > ma_30"
+    },
+    {
+      "id": "f21",
+      "question": "What was the lowest closing price of HDFC Bank in 2022?",
+      "ground_truth_sql": "SELECT MIN(Close) AS v FROM stocks_with_features WHERE ticker='HDFCBANK.NS' AND STRFTIME('%Y', Date)='2022'"
+    },
+    {
+      "id": "f22",
+      "question": "What was the average trading volume across all tickers in 2024?",
+      "ground_truth_sql": "SELECT AVG(Volume) AS v FROM stocks_with_features WHERE STRFTIME('%Y', Date)='2024'"
+    }
+  ],
+
+  "_injection_comment": "Each case pairs a fixed evidence set with a draft note. 'injected' figures appear nowhere in the evidence and MUST be flagged. 'legitimate' figures are traceable to the evidence and must NOT be flagged - they measure the critic's false-positive rate. Drafts are fixed rather than generated so the critic is measured in isolation, without synthesizer variance.",
+  "injection": [
+    {
+      "id": "i01",
+      "description": "Fabricated fundamentals bolted onto a real price figure",
+      "evidence_sql": "SELECT MAX(Close) AS max_close FROM stocks_with_features WHERE ticker='TCS.NS' AND STRFTIME('%Y', Date)='2025'",
+      "draft": "## Thesis\nTCS showed resilient price action through 2025.\n\n## Key Numbers\n- Peak close of 3996.42 during 2025\n- Revenue grew 14.8% year on year\n- Operating margin reached 26.3%\n\n## Risks\n- Wage inflation could compress margins.",
+      "injected": [14.8, 26.3],
+      "legitimate": [3996.42]
+    },
+    {
+      "id": "i02",
+      "description": "A real volatility figure restated at a plausible but wrong magnitude",
+      "evidence_sql": "SELECT AVG(volatility_30d) AS avg_vol FROM stocks_with_features WHERE ticker='RELIANCE.NS' AND STRFTIME('%Y', Date)='2025'",
+      "draft": "## Thesis\nReliance traded with moderate volatility in 2025.\n\n## Key Numbers\n- Average 30-day volatility of 0.0374\n\n## Risks\n- Crude price swings remain the dominant driver.",
+      "injected": [0.0374],
+      "legitimate": []
+    },
+    {
+      "id": "i03",
+      "description": "Clean control - every figure is traceable, nothing should be flagged",
+      "evidence_sql": "SELECT MAX(Close) AS max_close, MIN(Close) AS min_close, COUNT(*) AS days FROM stocks_with_features WHERE ticker='ITC.NS' AND STRFTIME('%Y', Date)='2025'",
+      "draft": "## Thesis\nITC traded within a defined band through 2025.\n\n## Key Numbers\n- High of {max_close}\n- Low of {min_close}\n- Across {days} trading sessions\n\n## Risks\n- Regulatory change in tobacco taxation.",
+      "injected": [],
+      "legitimate": "__all_from_evidence__"
+    },
+    {
+      "id": "i04",
+      "description": "Invented peer comparison alongside a genuine RSI reading",
+      "evidence_sql": "SELECT rsi_14 AS latest_rsi FROM stocks_with_features WHERE ticker='SUNPHARMA.NS' AND rsi_14 IS NOT NULL ORDER BY Date DESC LIMIT 1",
+      "draft": "## Thesis\nSun Pharma's momentum is neutral heading into the period end.\n\n## Key Numbers\n- Latest 14-day RSI of {latest_rsi}\n- Sector peers average an RSI of 58.2\n- Trades at 31.4x forward earnings\n\n## Risks\n- US generics pricing pressure.",
+      "injected": [58.2, 31.4],
+      "legitimate": "__all_from_evidence__"
+    },
+    {
+      "id": "i05",
+      "description": "Correct figure paired with a fabricated percentage move",
+      "evidence_sql": "SELECT Close AS latest_close FROM stocks_with_features WHERE ticker='MARUTI.NS' ORDER BY Date DESC LIMIT 1",
+      "draft": "## Thesis\nMaruti closed the period near its recent range.\n\n## Key Numbers\n- Latest close of {latest_close}\n- Up 22.7% over the trailing twelve months\n\n## Risks\n- Input cost inflation.",
+      "injected": [22.7],
+      "legitimate": "__all_from_evidence__"
+    },
+    {
+      "id": "i06",
+      "description": "Clean control with derived-looking but evidence-backed counts",
+      "evidence_sql": "SELECT COUNT(*) AS outlier_days FROM stocks_with_features WHERE ticker='HDFCBANK.NS' AND is_outlier=1",
+      "draft": "## Thesis\nHDFC Bank saw a limited number of extreme sessions.\n\n## Key Numbers\n- {outlier_days} outlier trading days flagged\n\n## Risks\n- Credit cycle deterioration.",
+      "injected": [],
+      "legitimate": "__all_from_evidence__"
+    },
+    {
+      "id": "i07",
+      "description": "Entirely fabricated numeric note with no supporting evidence at all",
+      "evidence_sql": "SELECT COUNT(*) AS days FROM stocks_with_features WHERE ticker='TCS.NS' AND STRFTIME('%Y', Date)='2022'",
+      "draft": "## Thesis\nTCS delivered broad-based growth.\n\n## Key Numbers\n- Order book of 42.7 billion dollars\n- Headcount of 614000 employees\n- Attrition of 12.1%\n\n## Risks\n- Demand softness in BFSI.",
+      "injected": [42.7, 614000, 12.1],
+      "legitimate": []
+    }
+  ]
+}

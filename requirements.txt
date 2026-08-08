@@ -1,0 +1,30 @@
+# Financial Insight Copilot — pinned to the versions this project was built and
+# tested against (Python 3.12).
+#
+#   python -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements.txt
+
+# --- v1: data pipeline, text-to-SQL, API and UI ------------------------------
+yfinance==1.5.2
+pandas==3.0.5
+numpy==2.5.1
+SQLAlchemy==2.0.51
+groq==1.6.0
+python-dotenv==1.2.2
+fastapi==0.140.7
+uvicorn==0.51.0
+pydantic==2.13.4
+streamlit==1.60.0
+requests==2.34.2
+
+# --- v1: exploratory analysis (eda.py) ---------------------------------------
+matplotlib==3.11.1
+seaborn==0.13.2
+
+# --- v2: multi-agent graph, RAG and tracing ----------------------------------
+langgraph==1.2.10
+# chromadb bundles all-MiniLM-L6-v2 as an ONNX model, so the embeddings named in
+# the spec come without the ~2GB torch dependency sentence-transformers needs.
+chromadb==1.5.9
+pypdf==6.14.2
+langfuse==4.14.1
